@@ -1,8 +1,22 @@
 (function () {
+
+    var GroupLimits = {
+        gold: {
+            minValue: 50,
+            name: 'gold'
+        },
+        silver: {
+            minValue: 5,
+            name: 'silver'
+        },
+        bronze: {
+            name: 'bronze'
+        }
+    };
+
     $(document).ready(function () {
         getContributorsList();
     });
-
 
     function getContributorsList() {
         var promise = $.get("https://api.github.com/repos/thomasdavis/backbonetutorials/contributors");
@@ -28,19 +42,19 @@
     }
 
     function setGroupStatus(person) {
-        if(person.contributions > 50) person.group = 'gold';
-        else if(person.contributions > 5) person.group = 'silver';
-        else person.group = 'bronze';
+        if(person.contributions > GroupLimits.gold.minValue) person.group = GroupLimits.gold.name;
+        else if(person.contributions > GroupLimits.silver.minValue) person.group = GroupLimits.silver.name;
+        else person.group = GroupLimits.bronze.name;
     }
 
     function showContributorsFromType(group) {
         if(group === "all") {
-            $(".contributors-gold, .contributors-silver, .contributors-bronze").show();
+            $(".contributors").children().show();
         } else {
-            $(".contributors-gold").hide();
-            $(".contributors-silver").hide();
-            $(".contributors-bronze").hide();
+            $(".contributors").children().hide();
             $(".contributors-" + group).show();
         }
     }
+
+    
 })();
