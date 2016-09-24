@@ -11,6 +11,16 @@
   float: left;
   margin: 20px 0 0 40px; }
 
+.sort-selector {
+  width: 200px;
+  float: right;
+  margin: 20px 0 0 40px; }
+
+.sort-by {
+  font: 200% Halvetica, sans-serif;
+  margin: 20px 0 0 40px;
+  float: right; }
+
 .gold img {
   box-shadow: 0 0 25px #ffd700;
   transition: all 0.5s ease; }

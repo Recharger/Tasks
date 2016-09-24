@@ -21,7 +21,15 @@
     function getContributorsList() {
         var promise = $.get("https://api.github.com/repos/thomasdavis/backbonetutorials/contributors");
         $.when(promise).done(function (data) {
+            sortContributorsArray(data);
             separateContributorsList(data);
+            $(".sort-selector").change(function () {
+                $(".contributors").html("");
+                sortContributorsArray(data);
+                separateContributorsList(data);
+                showContributorsFromType($(".contributor-type").val());
+
+            });
             $(".contributor-type").change(function () {
                 showContributorsFromType($(this).val());
             })
@@ -37,7 +45,7 @@
     }
 
     function createContributorElement(person) {
-        $(".contributors-" + person.group).append('<div class="contributor-item ' + person.group + '"><img src="' + person.avatar_url + '" class="img-circle contributor">' +
+        $(".contributors").append('<div class="contributor-item ' + person.group + '"><img src="' + person.avatar_url + '" class="img-circle contributor">' +
             '<h3>' + person.login + '</h3><div/>');
     }
 
@@ -52,9 +60,31 @@
             $(".contributors").children().show();
         } else {
             $(".contributors").children().hide();
-            $(".contributors-" + group).show();
+            $("." + group).show();
         }
     }
 
-    
+    function sortContributorsArray(arr) {
+        var sortType = $(".sort-selector").val();
+        if(sortType == "asc") {
+            arr.sort(function (a, b) {
+                if (a.login.toLowerCase() > b.login.toLowerCase()) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            });
+        }
+        if(sortType == "desc") {
+            arr.sort(function (a, b) {
+                if (a.login.toLowerCase() < b.login.toLowerCase()) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            });
+        }
+    }
+
+
 })();
