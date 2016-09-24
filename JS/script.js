@@ -16,6 +16,13 @@
 
     $(document).ready(function () {
         getContributorsList();
+        $(".contributors").on("click",".contributor-item",function () {
+            parseUserData({login: $(this).find("h3").html()});
+        });
+        $(".modal").on("hidden.bs.modal",function () {
+            $(".modal-body").html('');
+            $(".modal-title").html('');
+        });
     });
 
     function getContributorsList() {
@@ -33,7 +40,7 @@
             $(".contributor-type").change(function () {
                 showContributorsFromType($(this).val());
             })
-        })
+        });
     }
 
     function separateContributorsList(object) {
@@ -85,6 +92,35 @@
             });
         }
     }
+
+    function parseUserData(parameters) {
+        var login = parameters.login;
+        var promise = $.get("https://api.github.com/users/" + login);
+        $.when(promise).done(function (data) {
+            $("#myModal").modal("show");
+            fillModalWindowFields(data);
+        });
+
+    }
+
+    function fillModalWindowFields(user) {
+        $(".modal-title").html("Information about: " + user.login);
+        var name = (user.name)? '<p>Name: ' + capitalizeFirstLetter(user.name) + '</p>' : '';
+        var company = (user.company)? '<p>Company: ' + capitalizeFirstLetter(user.company) + '</p>' : '';
+        var blog = (user.blog)? '<p>Blog: <a href="'+ user.blog +'" target="_blank">'+ user.blog +'</a></p>' : '';
+        var email = (user.email)? '<p>Email: <a href="mailto:' + user.email + '">' + user.email + '</a></p>' : '';
+        var location = (user.location)? '<p>Location: ' + user.location + "</p>" : '';
+
+        $(".modal-body").html('<img src="' + user.avatar_url + '"> ' +
+            ((name || company || blog || email || location)?
+                name + company + blog + email + location
+                    : '<h2>There is no information about this user</h2>'));
+    }
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
 
 
 })();
