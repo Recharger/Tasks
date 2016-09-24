@@ -14,18 +14,20 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
+    <div class="row tools">
         <select class="contributor-type form-control">
             <option value="all">All</option>
             <option value="gold">Gold</option>
             <option value="silver">Silver</option>
             <option value="bronze">Bronze</option>
         </select>
-        <span class="sort-by">Sort by:</span>
-        <select class="sort-selector form-control">
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
+        <form class="form-inline">
+            <label class="sort-by">Sort by:</label>
+            <select class="sort-selector form-control">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+        </form>
     </div>
     <div class="row contributors">
     </div>
