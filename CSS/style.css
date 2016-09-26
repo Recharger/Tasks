@@ -1,3 +1,17 @@
+.modal .modal-title {
+  font-size: 175%;
+  font-family: Courier New, sans-serif; }
+.modal .modal-body {
+  font: 125% Halvetica, sans-serif; }
+  .modal .modal-body img {
+    -webkit-filter: grayscale(50%);
+    display: block;
+    margin: auto;
+    width: 50%;
+    float: inherit;
+    border-radius: 40px;
+    padding: 5px; }
+
 .contributor {
   width: 200px; }
 
@@ -16,7 +30,8 @@
   .tools form {
     float: right; }
   .tools .sort-by {
-    font: 150% Halvetica, sans-serif;
+    font-size: 150%;
+    font-family: Halvetica, sans-serif;
     margin-right: 15px; }
 
 .gold img {
@@ -26,7 +41,8 @@
     box-shadow: 0 0 40px #ffd700;
     transform: scale(1.1); }
 .gold h3 {
-  color: #ffd700; }
+  color: #ffd700;
+  font-size: 200%; }
 
 .silver img {
   box-shadow: 0 0 25px #C0C0C0;
@@ -35,7 +51,8 @@
     box-shadow: 0 0 40px #C0C0C0;
     transform: scale(1.1); }
 .silver h3 {
-  color: #C0C0C0; }
+  color: #C0C0C0;
+  font-size: 200%; }
 
 .bronze img {
   box-shadow: 0 0 25px #cd7f32;
@@ -44,6 +61,7 @@
     box-shadow: 0 0 40px #cd7f32;
     transform: scale(1.1); }
 .bronze h3 {
-  color: #cd7f32; }
+  color: #cd7f32;
+  font-size: 200%; }
 
 /*# sourceMappingURL=style.css.map */
