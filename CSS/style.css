@@ -4,13 +4,15 @@
 .modal .modal-body {
   font: 125% Halvetica, sans-serif; }
   .modal .modal-body img {
-    -webkit-filter: grayscale(50%);
+    -webkit-filter: grayscale(100%);
     display: block;
     margin: auto;
     width: 50%;
     float: inherit;
     border-radius: 40px;
     padding: 5px; }
+  .modal .modal-body h2 {
+    font-size: 125%; }
 
 .contributor {
   width: 200px; }

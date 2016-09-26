@@ -16,8 +16,12 @@
 
     $(document).ready(function () {
         getContributorsList();
+        var cache = {};
         $(".contributors").on("click",".contributor-item",function () {
-            parseUserData({login: $(this).find("h3").html()});
+            parseUserData({
+                login: $(this).find("h3").html(),
+                downloaded: cache
+            });
         });
         $(".modal").on("hidden.bs.modal",function () {
             $(".modal-body").html('');
@@ -104,18 +108,25 @@
 
     function parseUserData(options) {
         var login = options.login;
-        var promise = $.get("https://api.github.com/users/" + login);
-        $.when(promise).done(function (data) {
-            $("#myModal").modal("show");
-
-            fillModalWindowFields(data);
-        }).fail(function (data) {
-            new PNotify({
-                type: 'error',
-                title: 'OOPS!',
-                text: data.statusText
+        if(!options.downloaded[login]){
+            var promise = $.get("https://api.github.com/users/" + login);
+            $.when(promise).done(function (data) {
+                $("#myModal").modal("show");
+                options.downloaded[login] = data;
+                fillModalWindowFields(data);
+            }).fail(function (data) {
+                new PNotify({
+                    type: 'error',
+                    title: 'OOPS!',
+                    text: data.statusText
+                });
             });
-        });
+        } else {
+            $("#myModal").modal("show");
+            fillModalWindowFields(options.downloaded[login]);
+        }
+
+
 
     }
 
