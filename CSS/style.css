@@ -1,8 +1,8 @@
 .modal .modal-title {
   font-size: 175%;
-  font-family: Courier New, sans-serif; }
+  font-family: "Courier New", sans-serif; }
 .modal .modal-body {
-  font: 125% Halvetica, sans-serif; }
+  font: 125% "Helvetica", sans-serif; }
   .modal .modal-body img {
     -webkit-filter: grayscale(100%);
     display: block;
@@ -33,7 +33,7 @@
     float: right; }
   .tools .sort-by {
     font-size: 150%;
-    font-family: Halvetica, sans-serif;
+    font-family: "Helvetica", sans-serif;
     margin-right: 15px; }
 
 .gold img {
