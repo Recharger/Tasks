@@ -16,6 +16,7 @@
 
     $(document).ready(function () {
         getContributorsList();
+        $.cloudinary.config({ cloud_name: '988555781372168', api_key: 'nEHaU1EwhguJmtSJh2_Ms1UZ2rg'});
         var cache = {};
         $(".contributors").on("click", ".contributor-item", function () {
             parseUserData({
@@ -26,11 +27,32 @@
         $(".modal").on("hidden.bs.modal", function () {
             $(".modal-body, .modal-title").empty();
         });
+        $('.register').on('click', function () {
+            $('.contributors, .tools').hide();
+            $('.register-form').fadeIn();
+        });
+        $('.return-button').on('click', function () {
+            $('.contributors, .tools').fadeIn();
+            $('.register-form').hide();
+        });
+        $('.submit-button').on('click', function () {
+            getFieldsFromRegisterForm();
+        });
     });
+
+    function getFieldsFromRegisterForm() {
+        var contributor = {};
+        $('.register-form').find('input').each(function () {
+            contributor[$(this).attr('name')] = $(this).val();
+        });
+        localStorage.setItem(contributor.name, JSON.stringify(contributor));
+        console.log(JSON.parse(localStorage.getItem(contributor.name)));
+    }
 
     function getContributorsList() {
         var promise = $.get("https://api.github.com/repos/thomasdavis/backbonetutorials/contributors");
         $.when(promise).done(function (data) {
+            data = addLocalStorageFromContributors(data);
             sortContributorsArray(data);
             separateContributorsList(data);
             $(".sort-selector").change(function () {
@@ -50,6 +72,16 @@
                 text: data.statusText
             });
         });
+    }
+
+    function addLocalStorageFromContributors(data) {
+        /*localStorage.Storage.forEach(function (localContributor) {
+            data.push(JSON.parse(localContributor));
+        });*/
+        $.each(localStorage, function (key, value) {
+           data.push(JSON.parse(value));
+        });
+        return data;
     }
 
     function separateContributorsList(arrContributors) {
