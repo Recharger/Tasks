@@ -16,14 +16,13 @@
 
     $(document).ready(function () {
         getContributorsList();
-        $.cloudinary.config({ cloud_name: '988555781372168', api_key: 'nEHaU1EwhguJmtSJh2_Ms1UZ2rg'});
-        var cache = {};
         $(".contributors").on("click", ".contributor-item", function () {
             parseUserData({
                 login: $(this).find("h3").html(),
-                downloaded: cache
+                downloaded: {}
             });
         });
+        $(".register-fields").validate();
         $(".modal").on("hidden.bs.modal", function () {
             $(".modal-body, .modal-title").empty();
         });
@@ -32,12 +31,102 @@
             $('.register-form').fadeIn();
         });
         $('.return-button').on('click', function () {
-            $('.contributors, .tools').fadeIn();
-            $('.register-form').hide();
+            backWithClear();
         });
         $('.submit-button').on('click', function () {
             getFieldsFromRegisterForm();
+            backWithClear();
+            new PNotify({
+                type: 'success',
+                title: 'Hooray!',
+                text: 'New contributor added'
+            });
         });
+        $('.clear-local-storage').on('click', function () {
+            localStorage.clear();
+        });
+        backWithClear();
+        $('.register-fields').on('change', function () {
+            if($('.register-fields').valid()) {
+                $('.submit-button').removeAttr('disabled');
+            } else {
+                $('.submit-button').attr('disabled','disabled');
+            }
+        });
+    });
+
+    $('.upload_widget_opener').cloudinary_upload_widget(
+        { cloud_name: 'dbxudcjdq', upload_preset: 'wanb71fe', folder: 'user_photos', multiple: false },
+        function(error, result) {
+            if(error != undefined) return new PNotify({
+                type: 'warning',
+                title: 'Attention!',
+                text: 'Picture is not choosed'
+            });
+            $('.avatar-url').val('http://res.cloudinary.com/dbxudcjdq/image/upload/w_300,h_300,c_fill,g_face/' + result[0].public_id + '.png');
+        });
+
+    $('.register-fields').validate({
+        ignore: [],
+        rules: {
+            login: {
+                minlength: 2,
+                maxlength: 60,
+                required: true
+            },
+            name: {
+                minlength: 2,
+                maxlength: 60,
+                required: true
+            },
+            company: {
+                minlength: 5,
+                maxlength: 60,
+                required: true
+            },
+            blog: {
+                minlength: 3,
+                maxlength: 60,
+                url: true,
+                required: true
+            },
+            avatar_url: {
+                minlength: 1,
+                required: true
+            },
+            email: {
+                minlength: 6,
+                maxlength: 60,
+                email: true,
+                required: true
+            },
+            location: {
+                minlength: 2,
+                maxlength: 60,
+                required: true
+            },
+            level: {
+                required: true
+            },
+            contributions: {
+                required: true
+            },
+            technology: {
+                minlength: 1,
+                required: true
+            }
+        },
+        highlight: function (element) {
+            $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+        },
+        success: function (label, element) {
+            $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+            $(element).parent().find('span').remove();
+        },
+        errorPlacement: function (error, element) {
+            element.parent().find('span').remove();
+            element.parent().append('<span class="help-block">' + error.text() + '</span>');
+        }
     });
 
     function getFieldsFromRegisterForm() {
@@ -45,8 +134,22 @@
         $('.register-form').find('input').each(function () {
             contributor[$(this).attr('name')] = $(this).val();
         });
-        localStorage.setItem(contributor.name, JSON.stringify(contributor));
+        contributor.isLocalSaved = true;
+        localStorage.setItem(contributor.login, JSON.stringify(contributor));
         console.log(JSON.parse(localStorage.getItem(contributor.name)));
+    }
+
+    function backWithClear() {
+        $('.contributors, .tools').fadeIn();
+        $('.register-form').hide();
+        $('.technology').parent().empty().append('<input class="technology" name="technology">');
+        $('.register-form').find('input').each(function () {
+            $(this).val('');
+        });
+        $('.technology').tagit({
+            availableTags: ["c++", "java", "php", "javascript", "ruby", "python", "c"]
+        });
+        $('.cloudinary-thumbnails').remove();
     }
 
     function getContributorsList() {
@@ -75,9 +178,6 @@
     }
 
     function addLocalStorageFromContributors(data) {
-        /*localStorage.Storage.forEach(function (localContributor) {
-            data.push(JSON.parse(localContributor));
-        });*/
         $.each(localStorage, function (key, value) {
            data.push(JSON.parse(value));
         });
@@ -93,15 +193,19 @@
     }
 
     function createContributorElement(person) {
-        $(".contributors").append('<div class="contributor-item ' + person.group + '"><img src="' + person.avatar_url + '" class="img-circle contributor">' +
-            '<h3>' + person.login + '</h3><div/>');
+        var str = $('<div class="contributor-item ' + person.group + '"><img src="' + person.avatar_url + '" class="img-circle contributor">' +
+        '<h3>' + person.login + '</h3><div/>');
+        if(person.isLocalSaved === true) {
+            str.append('<h4><span class="label label-success">Local</span></h4>');
+        }
+        $(".contributors").append(str);
     }
 
     function setGroupStatus(person) {
-        if (person.contributions > GroupLimits.gold.minValue) {
+        if (+person.contributions > GroupLimits.gold.minValue) {
             person.group = GroupLimits.gold.name;
         }
-        else if (person.contributions > GroupLimits.silver.minValue) {
+        else if (+person.contributions > GroupLimits.silver.minValue) {
             person.group = GroupLimits.silver.name;
         }
         else {
@@ -128,23 +232,29 @@
     }
 
     function parseUserData(options) {
-        var login = options.login;
-        if (!options.downloaded[login]){
-            var promise = $.get("https://api.github.com/users/" + login);
-            $.when(promise).done(function (data) {
-                $(".modal").modal("show");
-                options.downloaded[login] = data;
-                fillModalWindowFields(data);
-            }).fail(function (data) {
-                new PNotify({
-                    type: 'error',
-                    title: 'OOPS!',
-                    text: data.statusText
-                });
-            });
-        } else {
+        console.log(options);
+        if(options.login in localStorage){
             $(".modal").modal("show");
-            fillModalWindowFields(options.downloaded[login]);
+            fillModalWindowFields(JSON.parse(localStorage[[options.login]]));
+        } else {
+            var login = options.login;
+            if (!options.downloaded[login]){
+                var promise = $.get("https://api.github.com/users/" + login);
+                $.when(promise).done(function (data) {
+                    $(".modal").modal("show");
+                    options.downloaded[login] = data;
+                    fillModalWindowFields(data);
+                }).fail(function (data) {
+                    new PNotify({
+                        type: 'error',
+                        title: 'OOPS!',
+                        text: data.statusText
+                    });
+                });
+            } else {
+                $(".modal").modal("show");
+                fillModalWindowFields(options.downloaded[login]);
+            }
         }
     }
 

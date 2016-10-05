@@ -20,7 +20,18 @@
 .contributor-item {
   display: inline-block;
   margin: 40px;
-  text-align: center; }
+  text-align: center;
+  position: relative; }
+
+.label {
+  position: absolute;
+  bottom: 60px;
+  right: 0; }
+
+.register-form {
+  margin-top: 20px; }
+  .register-form h1 {
+    text-align: center; }
 
 .tools {
   margin: 20px 0; }
