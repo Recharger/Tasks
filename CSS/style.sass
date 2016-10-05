@@ -1,0 +1,71 @@
+$font-modal: "Helvetica", sans-serif
+$font-header: "Courier New",sans-serif
+
+@import "modal"
+
+@mixin groupstyles($color,$font-size: 200%)
+  img
+    box-shadow: 0 0 25px $color
+    transition: all 0.5s ease
+    &:hover
+      box-shadow: 0 0 40px $color
+      transform: scale(1.1)
+  h3
+    color: $color
+    font-size: $font-size
+
+.contributor
+  width: 200px
+
+.contributor-item
+  display: inline-block
+  margin: 40px
+  text-align: center
+  position: relative
+
+.label
+  position: absolute
+  bottom: 60px
+  right: 0
+
+.register-form
+  margin-top: 20px
+  h1
+    text-align: center
+
+.tools
+  margin: 20px 0
+
+  .contributor-type
+    width: 200px
+    float: left
+
+  .sort-selector
+    width: 200px
+
+  form
+    float: right
+
+  .sort-by
+    font-size: 150%
+    font-family: $font-modal
+    margin-right: 15px
+
+.register
+  margin-left: 10px
+
+.form-buttons
+  text-align: center
+
+.gold
+  @include groupstyles(#ffd700)
+
+.silver
+  @include groupstyles(#C0C0C0)
+
+.bronze
+  @include groupstyles(#cd7f32)
+
+
+
+

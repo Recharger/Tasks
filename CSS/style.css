@@ -1,15 +1,57 @@
+.modal .modal-title {
+  font-size: 175%;
+  font-family: "Courier New", sans-serif; }
+.modal .modal-body {
+  font: 125% "Helvetica", sans-serif; }
+  .modal .modal-body img {
+    -webkit-filter: grayscale(100%);
+    display: block;
+    margin: auto;
+    width: 50%;
+    float: inherit;
+    border-radius: 40px;
+    padding: 5px; }
+  .modal .modal-body h2 {
+    font-size: 125%; }
+
 .contributor {
   width: 200px; }
 
 .contributor-item {
   display: inline-block;
   margin: 40px;
-  text-align: center; }
+  text-align: center;
+  position: relative; }
 
-.contributor-type {
-  width: 200px;
-  float: left;
-  margin: 20px 0 0 40px; }
+.label {
+  position: absolute;
+  bottom: 60px;
+  right: 0; }
+
+.register-form {
+  margin-top: 20px; }
+  .register-form h1 {
+    text-align: center; }
+
+.tools {
+  margin: 20px 0; }
+  .tools .contributor-type {
+    width: 200px;
+    float: left; }
+  .tools .sort-selector {
+    width: 200px; }
+  .tools form {
+    float: right; }
+  .tools .sort-by {
+    font-size: 150%;
+    font-family: "Helvetica", sans-serif;
+    margin-right: 15px; }
+
+.register {
+  margin-left: 10px; }
+
+.form-buttons {
+  text-align: center; }
 
 .gold img {
   box-shadow: 0 0 25px #ffd700;
@@ -18,7 +60,8 @@
     box-shadow: 0 0 40px #ffd700;
     transform: scale(1.1); }
 .gold h3 {
-  color: #ffd700; }
+  color: #ffd700;
+  font-size: 200%; }
 
 .silver img {
   box-shadow: 0 0 25px #C0C0C0;
@@ -27,7 +70,8 @@
     box-shadow: 0 0 40px #C0C0C0;
     transform: scale(1.1); }
 .silver h3 {
-  color: #C0C0C0; }
+  color: #C0C0C0;
+  font-size: 200%; }
 
 .bronze img {
   box-shadow: 0 0 25px #cd7f32;
@@ -36,6 +80,7 @@
     box-shadow: 0 0 40px #cd7f32;
     transform: scale(1.1); }
 .bronze h3 {
-  color: #cd7f32; }
+  color: #cd7f32;
+  font-size: 200%; }
 
 /*# sourceMappingURL=style.css.map */
